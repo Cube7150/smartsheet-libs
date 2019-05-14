@@ -42,13 +42,8 @@ def make_splits(df):
 # Read Environment Variable for envs['APIKEY']
 envs = {x: y for x, y in [x.strip().split("=") for x in open("c:\\cube.envs", "r").readlines()]}
 
-# Column postfix name set (1_PCODE, 1_PORTION, 1_CATCODE, 2_PCODE, 2_PORTION, 2_CATCODE)
-COLSET = ['PCODE', 'PORTION', 'CATCODE']
-
-COLSET_ = COLSET.copy()
-COLSET_.insert(0, "ID")
-
-COLSETS = [[str(y) + "_" + x for x in COLSET] for y in range(1, 2 + 1)]
+# Column postfix name set example (1_PCODE, 1_PORTION, 1_CATCODE, 2_PCODE, 2_PORTION, 2_CATCODE)
+COLSET_ = ['ID', 'PRJCODE', 'PORTION', 'CATCODE']
 
 ss_client = smartsheet.Smartsheet(envs['APIKEY'])
 
