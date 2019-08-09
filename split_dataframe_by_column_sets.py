@@ -34,23 +34,25 @@ def parse_dataframe(df):
     return df
 
 
-def make_splits(df):
-    return pd.concat([parse_dataframe(df.filter(regex="ID|^" + str(x) + "_")) for x in range(1, 2 + 1)]).sort_values(
-        by="ID").reset_index(drop=True)
+def make_splits(df, prefixcount):
+    return pd.concat(
+        [parse_dataframe(df.filter(regex="IDNUM|^" + str(x) + "_")) for x in range(1, prefixcount + 1)]).sort_values(
+        by="사번").reset_index(drop=True)
 
 
 # Read Environment Variable for envs['APIKEY']
 envs = {x: y for x, y in [x.strip().split("=") for x in open("c:\\cube.envs", "r").readlines()]}
 
-# Column postfix name set example (1_PCODE, 1_PORTION, 1_CATCODE, 2_PCODE, 2_PORTION, 2_CATCODE)
-COLSET_ = ['ID', 'PRJCODE', 'PORTION', 'CATCODE']
-
 ss_client = smartsheet.Smartsheet(envs['APIKEY'])
 
-sid = '1544346743924612'
+# Column postfix name set example (1_PCODE, 1_PORTION, 1_CATCODE, 2_PCODE, 2_PORTION, 2_CATCODE)
+COLSET_ = ['사번', '프로젝트코드', '분류코드', '비중', '업무세부', '등급']
+
+sid = '494368973973380'
 
 sheet = ss_client.Sheets.get_sheet(sid)
 
 df = sheets_to_dataframe(sheet)
+df2 = df[df['IDNUM'] != ""]
 
-make_splits(df).to_excel("c:\\temp\\abcabc.xlsx", index=None)
+make_splits(df2, 11).to_excel("c:\\temp\\abcabc.xlsx", index=None)
